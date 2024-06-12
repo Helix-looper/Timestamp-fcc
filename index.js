@@ -23,7 +23,7 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.get("/api/:data", (req, res) => {
+app.get("/api/:data?", (req, res) => {
   data = req.params.data;
 
   const validUnixDate = (str) => {
@@ -31,7 +31,12 @@ app.get("/api/:data", (req, res) => {
     return !isNaN(parsedInt) && parsedInt.toString().length >= 10;
   };
 
-  if (validUnixDate(data)) {
+  if(!data) {
+    let date = new Date();
+    const unixDate = Math.floor(date.getTime()/1000);
+    res.json({unix: unixDate, utc: date.toUTCString()});
+  }
+  else if (validUnixDate(data)) {
     const date = new Date(parseInt(data, 10));
     const UTCDate = date.toUTCString();
     const parsedInt = parseInt(data, 10);
