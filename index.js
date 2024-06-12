@@ -33,8 +33,7 @@ app.get("/api/:data?", (req, res) => {
 
   if(!data) {
     let date = new Date();
-    const unixDate = Math.floor(date.getTime()/1000);
-    res.json({unix: unixDate, utc: date.toUTCString()});
+    res.json({unix: date.valueOf(), utc: date.toUTCString()});
   }
   else if (validUnixDate(data)) {
     const date = new Date(parseInt(data, 10));
