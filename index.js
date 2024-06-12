@@ -29,19 +29,21 @@ app.get("/api/:data", (req, res) => {
   const validUnixDate = (str) => {
     const parsedInt = parseInt(str, 10);
     return !isNaN(parsedInt) && parsedInt.toString().length >= 10;
-  }
+  };
 
-  if(validUnixDate(data)) {
+  if (validUnixDate(data)) {
     const date = new Date(parseInt(data, 10));
     const UTCDate = date.toUTCString();
     const parsedInt = parseInt(data, 10);
-    res.json({unix: parsedInt, utc: UTCDate});
-  }
-  else {
+    res.json({ unix: parsedInt, utc: UTCDate });
+  } else {
     const date = new Date(data);
-    res.json({unix: date.valueOf(), utc: date.toUTCString()})
+    if (date.toString() === "Invalid Date") {
+      res.json({ error: "Invalid Date" });
+    } else {
+      res.json({ unix: date.valueOf(), utc: date.toUTCString() });
+    }
   }
-
 });
 
 // Listen on port set in environment variable or default to 3000
